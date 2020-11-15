@@ -8,7 +8,13 @@ import java.util.function.Supplier;
 import static com.craftinginterpreters.lox.TokenType.*;
 
 class Parser {
-    private static class ParseError extends RuntimeException {}
+    private static class ParseError extends RuntimeException {
+
+        /**
+         *
+         */
+        private static final long serialVersionUID = 1L;
+    }
 
     private final List<Token> tokens;
     private int current = 0;
@@ -399,6 +405,8 @@ class Parser {
             case PRINT:
             case RETURN:
                 return;
+            default:
+                break;
             }
 
             advance();

@@ -81,6 +81,8 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         case MINUS:
             checkNumberOperand(expr.operator, right);
             return -(double)right;
+        default:
+            break;
         }
 
         // Unreachable.
@@ -299,6 +301,8 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         case STAR:
             checkNumberOperand(expr.operator, left, right);
             return (double)left * (double)right;
+        default:
+            break;
         }
 
         // Unreachable.
