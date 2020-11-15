@@ -3,13 +3,16 @@ package com.craftinginterpreters.lox;
 import java.util.List;
 
 class LoxFunction implements LoxCallable {
+    final boolean isGetter;
+
     private final Stmt.Function declaration;
     private final Environment closure;
 
     private final boolean isInitializer;
 
-    LoxFunction(Stmt.Function declaration, Environment closure, boolean isInitializer) {
+    LoxFunction(Stmt.Function declaration, Environment closure, boolean isInitializer, boolean isGetter) {
         this.isInitializer = isInitializer;
+        this.isGetter = isGetter;
         this.closure = closure;
         this.declaration = declaration;
     }
@@ -17,7 +20,7 @@ class LoxFunction implements LoxCallable {
     LoxFunction bind(LoxInstance instance) {
         Environment environment = new Environment(closure);
         environment.define("this", instance);
-        return new LoxFunction(declaration, environment, isInitializer);
+        return new LoxFunction(declaration, environment, isInitializer, isGetter);
     }
 
     @Override

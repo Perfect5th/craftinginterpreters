@@ -176,8 +176,11 @@ class Parser {
 
     private Stmt.Function function(String kind) {
         Token name = consume(IDENTIFIER, "Expect " + kind + " name.");
-        consume(LEFT_PAREN, "Expect '(' after " + kind + " name.");
+
+        if (!check(LEFT_PAREN) && kind.equals("method")) return getter(name);
+
         List<Token> parameters = new ArrayList<>();
+        consume(LEFT_PAREN, "Expect '(' before parameters.");
         if (!check(RIGHT_PAREN)) {
             do {
                 if (parameters.size() >= 255) {
@@ -191,7 +194,15 @@ class Parser {
 
         consume(LEFT_BRACE, "Expect '{' before " + kind + " body.");
         List<Stmt> body = block();
-        return new Stmt.Function(name, parameters, body);
+
+        return new Stmt.Function(name, parameters, body, false);
+    }
+
+    private Stmt.Function getter(Token name) {
+        consume(LEFT_BRACE, "Expect '{' before getter body.");
+        List<Stmt> body = block();
+
+        return new Stmt.Function(name, new ArrayList<>(), body, true);
     }
 
     private List<Stmt> block() {
